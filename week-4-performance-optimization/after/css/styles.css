@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Northwind — optimised stylesheet (readable source)
+   --------------------------------------------------------------------------
+   The page loads `styles.min.css`, which is generated from this file.
+   The critical above-the-fold rules are inlined in <head> of index.html, so
+   this sheet only has to style the rest of the page.
+
+   Optimisations applied versus ../before/css/:
+     · CSS custom properties instead of 1 400 `!important` declarations
+     · 3 sheets (237 KB) -> 1 sheet (19 KB source / 6.9 KB minified)
+     · no duplicated theme blocks
+     · layout properties replaced with transform/opacity for animation
+     · `content-visibility: auto` on below-the-fold sections
+     · `contain` on repeated components to limit layout invalidation
+   ========================================================================== */
+
+/* ---------------------------- 01. Tokens ---------------------------- */
+
+/* ✅ The @font-face that makes the <link rel="preload"> in index.html
+   actually count. `font-display: swap` paints text immediately in the
+   system fallback instead of leaving the page blank. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215;
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f8fafc;
+  --ink: #1f2937;
+  --ink-soft: #4b5563;
+  --ink-faint: #6b7280;
+  --line: #e5e7eb;
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --brand-tint: #eff6ff;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 12px rgba(16, 24, 40, .05);
+  --ease: cubic-bezier(.2, .7, .3, 1);
+  --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------------------------- 02. Base ---------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -.025em; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+img { display: block; max-width: 100%; height: auto; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+.skip:focus { color: #fff; }
+
+.container { width: min(100% - 2rem, 1120px); margin-inline: auto; }
+
+.section { padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem); }
+.section--alt { background: var(--bg-alt); }
+.section-title { font-size: clamp(1.4rem, 1.15rem + 1.1vw, 2rem); margin-bottom: 1.4rem; }
+
+/* ---------------------------- 03. Nav ---------------------------- */
+.topbar__in { min-height: 64px; }
+.nav { display: flex; gap: 1.2rem; }
+.nav a { color: var(--ink-soft); text-decoration: none; font-size: .94rem; font-weight: 500; transition: color .15s var(--ease); }
+.nav a:hover, .nav a[aria-current] { color: var(--brand); }
+.nav a:focus-visible { color: var(--brand); }
+
+/* ---------------------------- 04. Cards ----------------------------
+   `contain` tells the browser that changes inside a card cannot affect the
+   outside, so re-rendering one card never invalidates the whole grid.        */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+.card {
+  contain: layout paint style;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(16, 24, 40, .1); }
+.card img { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; }
+.card__body { padding: 1.1rem 1.2rem 1.35rem; }
+.card__body h3 { font-size: 1.05rem; margin-bottom: .4rem; }
+.card__body p { color: var(--ink-soft); font-size: .93rem; }
+
+/* The third card replaced a 3 MB duplicate photograph with a gradient. */
+.card--gradient {
+  background: linear-gradient(150deg, #1e3a8a, #4c1d95 60%, #0f766e);
+  display: grid;
+  align-content: end;
+  min-height: 220px;
+  border: 0;
+}
+.card--gradient .card__body h3 { color: #fff; }
+.card--gradient .card__body p { color: #dbeafe; }
+
+/* ---------------------------- 05. Split ---------------------------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 1rem + 3vw, 3.5rem); align-items: center; }
+.split figure { margin: 0; }
+.split img { border-radius: var(--radius); box-shadow: var(--shadow); }
+blockquote { margin: 0 0 1.5rem; padding: 1rem 0 0 1.1rem; border-left: 4px solid var(--brand); }
+blockquote p { font-size: 1.08rem; color: var(--ink); }
+blockquote footer { margin-top: .6rem; font-size: .88rem; color: var(--ink-faint); }
+
+/* ---------------------------- 06. Table ---------------------------- */
+.plans { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.plans caption { text-align: left; padding-bottom: .6rem; font-size: .84rem; color: var(--ink-faint); }
+.plans th, .plans td { padding: .65rem .5rem; text-align: left; border-bottom: 1px solid var(--line); }
+.plans thead th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); }
+.plans tbody th { font-weight: 600; }
+
+/* ---------------------------- 07. Form ---------------------------- */
+.form { max-width: 420px; }
+.field { margin-bottom: 1rem; }
+.field label { display: block; margin-bottom: .3rem; font-size: .9rem; font-weight: 600; }
+.field input, .field select {
+  width: 100%; min-height: 46px; padding: .65rem .8rem;
+  font: inherit; font-size: .95rem; color: var(--ink);
+  background: #fff; border: 1.5px solid #9aa4bb; border-radius: 9px;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.field input::placeholder { color: #6b7280; opacity: 1; }
+.field input:focus, .field select:focus {
+  outline: none; border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-tint);
+}
+.field__error { min-height: 1.2rem; margin: .3rem 0 0; font-size: .84rem; color: #b42318; }
+.form-status { min-height: 1.3rem; margin: .8rem 0 0; font-size: .9rem; font-weight: 600; color: #146c43; }
+
+/* ---------------------------- 08. Footer ---------------------------- */
+.site-footer { padding-block: 2rem; background: var(--bg-alt); border-top: 1px solid var(--line); }
+.site-footer .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: .88rem; color: var(--ink-faint); }
+
+/* Author credit line */
+.site-footer .credit { flex: 1 1 100%; text-align: center; font-size: .8rem; color: var(--ink-faint); margin: 0; }
+.site-footer .credit strong { color: var(--ink); font-weight: 700; }
+
+/* ==========================================================================
+   09. PERFORMANCE
+   ========================================================================== */
+
+/* Below-the-fold sections are skipped entirely until they are near the
+   viewport: no layout, no paint, no style resolution while off-screen. */
+.section.features,
+.section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
+}
+
+/* The reveal animation only ever touches `transform` and `opacity`, which the
+   compositor can animate without recalculating layout or paint. */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+  will-change: opacity, transform;   /* removed by JS after the first paint */
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* The LCP hero image is promoted to its own layer so the gradient behind it
+   can paint without waiting for the image decode. */
+.hero img { will-change: opacity; }
+
+/* Scroll behaviour is CSS-only, so there is no JS scroll listener at all. */
+html { scroll-behavior: smooth; }
+
+/* --------------------------------------------------------------------------
+   10. RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  .container { width: min(100% - 1.5rem, 1120px); }
+  .split { grid-template-columns: 1fr; }
+  .topbar__in { flex-wrap: wrap; min-height: 56px; }
+  .nav { flex-wrap: wrap; font-size: .9rem; }
+  .hero { min-height: 300px; }
+}
+
+/* --------------------------------------------------------------------------
+   11. REDUCED MOTION / PRINT
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .001ms !important; animation-duration: .001ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+@media print {
+  .topbar, .hero img, .skip { display: none !important; }
+  body { color: #000; }
+  .section { padding-block: 1rem; }
+}

@@ -1,0 +1,679 @@
+/**
+ * ==========================================================================
+ *  fallback-data.js — offline / file:// fallback
+ * --------------------------------------------------------------------------
+ *  GENERATED FILE — do not edit by hand.
+ *  Regenerate with:  node tools/build-fallback-data.js
+ *
+ *  The dashboard normally fetches data/dashboard-data.json. Browsers block
+ *  fetch() on the file:// protocol, so when that request fails this file is
+ *  injected as a classic <script> tag. The dashboard then works when
+ *  index.html is opened straight from disk, with no server.
+ *
+ *  Over http:// this file is never downloaded: the injection only runs
+ *  inside the rejection branch of DataService.load().
+ * ==========================================================================
+ */
+
+(function (global) {
+  'use strict';
+
+  var NS = (global.NovaDash = global.NovaDash || {});
+
+  NS.FALLBACK_DATA = {
+  "meta": {
+    "generated": "2026-09-26T08:00:00Z",
+    "currency": "USD",
+    "currencySymbol": "$",
+    "periodLabel": "Oct 2025 – Sep 2026",
+    "comparedTo": "previous 12 months",
+    "company": "NovaDesk Labs"
+  },
+  "kpis": [
+    {
+      "id": "arr",
+      "label": "Annual recurring revenue",
+      "value": 4820000,
+      "format": "currency-compact",
+      "delta": 18.4,
+      "direction": "up",
+      "goodDirection": "up",
+      "spark": [
+        2980,
+        3120,
+        3260,
+        3410,
+        3520,
+        3610,
+        3740,
+        3890,
+        4010,
+        4180,
+        4470,
+        4820
+      ]
+    },
+    {
+      "id": "mrr",
+      "label": "Monthly recurring revenue",
+      "value": 401667,
+      "format": "currency",
+      "delta": 16.9,
+      "direction": "up",
+      "goodDirection": "up",
+      "spark": [
+        249,
+        261,
+        272,
+        284,
+        293,
+        301,
+        312,
+        324,
+        334,
+        348,
+        372,
+        402
+      ]
+    },
+    {
+      "id": "customers",
+      "label": "Active customers",
+      "value": 4218,
+      "format": "number",
+      "delta": 12.1,
+      "direction": "up",
+      "goodDirection": "up",
+      "spark": [
+        2980,
+        3120,
+        3260,
+        3410,
+        3520,
+        3610,
+        3740,
+        3890,
+        4010,
+        4180,
+        4205,
+        4218
+      ]
+    },
+    {
+      "id": "churn",
+      "label": "Monthly churn rate",
+      "value": 1.8,
+      "format": "percent",
+      "delta": -0.6,
+      "direction": "down",
+      "goodDirection": "down",
+      "spark": [
+        2.9,
+        2.8,
+        2.7,
+        2.6,
+        2.5,
+        2.4,
+        2.3,
+        2.2,
+        2.1,
+        2,
+        1.9,
+        1.8
+      ]
+    },
+    {
+      "id": "nps",
+      "label": "Net promoter score",
+      "value": 62,
+      "format": "score",
+      "delta": 4,
+      "direction": "up",
+      "goodDirection": "up",
+      "spark": [
+        48,
+        49,
+        51,
+        50,
+        52,
+        54,
+        55,
+        57,
+        58,
+        59,
+        61,
+        62
+      ]
+    },
+    {
+      "id": "ttf",
+      "label": "Median time to value",
+      "value": 6.2,
+      "format": "days",
+      "delta": 1.4,
+      "direction": "down",
+      "goodDirection": "down",
+      "spark": [
+        11.2,
+        10.6,
+        10.1,
+        9.4,
+        9,
+        8.6,
+        8.1,
+        7.6,
+        7.3,
+        6.9,
+        6.5,
+        6.2
+      ]
+    }
+  ],
+  "revenue": {
+    "labels": [
+      "Oct",
+      "Nov",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep"
+    ],
+    "series": [
+      {
+        "id": "subscription",
+        "name": "Subscription",
+        "colour": "#6366f1",
+        "values": [
+          248000,
+          262000,
+          271000,
+          284000,
+          293000,
+          301000,
+          312000,
+          324000,
+          334000,
+          348000,
+          372000,
+          402000
+        ]
+      },
+      {
+        "id": "services",
+        "name": "Professional services",
+        "colour": "#0ea5e9",
+        "values": [
+          42000,
+          44000,
+          48000,
+          46000,
+          51000,
+          54000,
+          52000,
+          58000,
+          61000,
+          59000,
+          64000,
+          68000
+        ]
+      },
+      {
+        "id": "marketplace",
+        "name": "Marketplace",
+        "colour": "#14b8a6",
+        "values": [
+          18000,
+          19000,
+          21000,
+          20000,
+          23000,
+          25000,
+          24000,
+          27000,
+          29000,
+          28000,
+          31000,
+          34000
+        ]
+      }
+    ]
+  },
+  "channels": {
+    "labels": [
+      "Self-serve",
+      "Sales-led",
+      "Partner",
+      "Marketplace",
+      "Expansion"
+    ],
+    "series": [
+      {
+        "id": "current",
+        "name": "This year",
+        "colour": "#6366f1",
+        "values": [
+          1180000,
+          1540000,
+          620000,
+          340000,
+          1140000
+        ]
+      },
+      {
+        "id": "previous",
+        "name": "Last year",
+        "colour": "#cbd5e1",
+        "values": [
+          980000,
+          1210000,
+          540000,
+          260000,
+          720000
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "organic",
+      "name": "Organic search",
+      "value": 38
+    },
+    {
+      "id": "paid",
+      "name": "Paid campaigns",
+      "value": 24
+    },
+    {
+      "id": "direct",
+      "name": "Direct",
+      "value": 18
+    },
+    {
+      "id": "referral",
+      "name": "Referral",
+      "value": 12
+    },
+    {
+      "id": "social",
+      "name": "Social",
+      "value": 8
+    }
+  ],
+  "regions": [
+    {
+      "id": "na",
+      "name": "North America",
+      "revenue": 1980000,
+      "customers": 1610,
+      "share": 41.1,
+      "delta": 15.2
+    },
+    {
+      "id": "emea",
+      "name": "EMEA",
+      "revenue": 1240000,
+      "customers": 1180,
+      "share": 25.7,
+      "delta": 21.8
+    },
+    {
+      "id": "apac",
+      "name": "APAC",
+      "revenue": 980000,
+      "customers": 890,
+      "share": 20.3,
+      "delta": 26.4
+    },
+    {
+      "id": "latam",
+      "name": "LATAM",
+      "revenue": 420000,
+      "customers": 338,
+      "share": 8.7,
+      "delta": -4.2
+    },
+    {
+      "id": "mea",
+      "name": "Middle East",
+      "revenue": 200000,
+      "customers": 200,
+      "share": 4.2,
+      "delta": 31.5
+    }
+  ],
+  "teamLoad": [
+    {
+      "id": "eng",
+      "name": "Engineering",
+      "capacity": 88,
+      "people": 24
+    },
+    {
+      "id": "design",
+      "name": "Design",
+      "capacity": 74,
+      "people": 6
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "capacity": 96,
+      "people": 18
+    },
+    {
+      "id": "support",
+      "name": "Support",
+      "capacity": 61,
+      "people": 11
+    },
+    {
+      "id": "ops",
+      "name": "Operations",
+      "capacity": 69,
+      "people": 8
+    }
+  ],
+  "transactions": [
+    {
+      "id": "INV-20418",
+      "date": "2026-09-24",
+      "customer": "Northwind Retail",
+      "plan": "Enterprise",
+      "region": "na",
+      "seats": 420,
+      "amount": 48600,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20417",
+      "date": "2026-09-23",
+      "customer": "Lumina Health",
+      "plan": "Growth",
+      "region": "na",
+      "seats": 180,
+      "amount": 21600,
+      "status": "paid",
+      "owner": "R. Kulkarni"
+    },
+    {
+      "id": "INV-20416",
+      "date": "2026-09-22",
+      "customer": "Vertex Logistics",
+      "plan": "Enterprise",
+      "region": "emea",
+      "seats": 610,
+      "amount": 71200,
+      "status": "review",
+      "owner": "L. Fischer"
+    },
+    {
+      "id": "INV-20415",
+      "date": "2026-09-21",
+      "customer": "Arcadia Media",
+      "plan": "Growth",
+      "region": "emea",
+      "seats": 95,
+      "amount": 11400,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20414",
+      "date": "2026-09-19",
+      "customer": "Quantix Analytics",
+      "plan": "Starter",
+      "region": "apac",
+      "seats": 12,
+      "amount": 0,
+      "status": "free",
+      "owner": "T. Adeyemi"
+    },
+    {
+      "id": "INV-20413",
+      "date": "2026-09-18",
+      "customer": "Halcyon Bank",
+      "plan": "Enterprise",
+      "region": "emea",
+      "seats": 1250,
+      "amount": 148000,
+      "status": "paid",
+      "owner": "L. Fischer"
+    },
+    {
+      "id": "INV-20412",
+      "date": "2026-09-17",
+      "customer": "Cobalt Systems",
+      "plan": "Growth",
+      "region": "apac",
+      "seats": 240,
+      "amount": 28800,
+      "status": "paid",
+      "owner": "T. Adeyemi"
+    },
+    {
+      "id": "INV-20411",
+      "date": "2026-09-16",
+      "customer": "Delta Freight",
+      "plan": "Growth",
+      "region": "na",
+      "seats": 150,
+      "amount": 18000,
+      "status": "review",
+      "owner": "R. Kulkarni"
+    },
+    {
+      "id": "INV-20410",
+      "date": "2026-09-15",
+      "customer": "Solstice Energy",
+      "plan": "Enterprise",
+      "region": "mea",
+      "seats": 780,
+      "amount": 92400,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20409",
+      "date": "2026-09-14",
+      "customer": "Pinewood Schools",
+      "plan": "Starter",
+      "region": "na",
+      "seats": 8,
+      "amount": 0,
+      "status": "free",
+      "owner": "R. Kulkarni"
+    },
+    {
+      "id": "INV-20408",
+      "date": "2026-09-12",
+      "customer": "Ironclad Insurance",
+      "plan": "Enterprise",
+      "region": "na",
+      "seats": 940,
+      "amount": 110400,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20407",
+      "date": "2026-09-11",
+      "customer": "Beaconside",
+      "plan": "Growth",
+      "region": "latam",
+      "seats": 64,
+      "amount": 7680,
+      "status": "paid",
+      "owner": "T. Adeyemi"
+    },
+    {
+      "id": "INV-20406",
+      "date": "2026-09-10",
+      "customer": "Maple & Co",
+      "plan": "Starter",
+      "region": "emea",
+      "seats": 21,
+      "amount": 0,
+      "status": "free",
+      "owner": "L. Fischer"
+    },
+    {
+      "id": "INV-20405",
+      "date": "2026-09-09",
+      "customer": "Zenith Robotics",
+      "plan": "Growth",
+      "region": "apac",
+      "seats": 205,
+      "amount": 24600,
+      "status": "failed",
+      "owner": "T. Adeyemi"
+    },
+    {
+      "id": "INV-20404",
+      "date": "2026-09-08",
+      "customer": "Sundial Travel",
+      "plan": "Growth",
+      "region": "apac",
+      "seats": 118,
+      "amount": 14160,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20403",
+      "date": "2026-09-06",
+      "customer": "Kestrel Pharma",
+      "plan": "Enterprise",
+      "region": "emea",
+      "seats": 520,
+      "amount": 62400,
+      "status": "paid",
+      "owner": "L. Fischer"
+    },
+    {
+      "id": "INV-20402",
+      "date": "2026-09-05",
+      "customer": "Ridgeway Legal",
+      "plan": "Starter",
+      "region": "na",
+      "seats": 15,
+      "amount": 0,
+      "status": "free",
+      "owner": "R. Kulkarni"
+    },
+    {
+      "id": "INV-20401",
+      "date": "2026-09-04",
+      "customer": "Aurora Games",
+      "plan": "Growth",
+      "region": "apac",
+      "seats": 175,
+      "amount": 21000,
+      "status": "paid",
+      "owner": "T. Adeyemi"
+    },
+    {
+      "id": "INV-20400",
+      "date": "2026-09-03",
+      "customer": "Granite Construction",
+      "plan": "Growth",
+      "region": "na",
+      "seats": 132,
+      "amount": 15840,
+      "status": "review",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20399",
+      "date": "2026-09-02",
+      "customer": "Blue Harbour Foods",
+      "plan": "Starter",
+      "region": "emea",
+      "seats": 9,
+      "amount": 0,
+      "status": "free",
+      "owner": "L. Fischer"
+    },
+    {
+      "id": "INV-20398",
+      "date": "2026-08-30",
+      "customer": "Tessellate Design",
+      "plan": "Growth",
+      "region": "na",
+      "seats": 88,
+      "amount": 10560,
+      "status": "paid",
+      "owner": "R. Kulkarni"
+    },
+    {
+      "id": "INV-20397",
+      "date": "2026-08-28",
+      "customer": "Northgate Utilities",
+      "plan": "Enterprise",
+      "region": "emea",
+      "seats": 1100,
+      "amount": 132000,
+      "status": "paid",
+      "owner": "A. Mensah"
+    },
+    {
+      "id": "INV-20396",
+      "date": "2026-08-26",
+      "customer": "Lagoon Studios",
+      "plan": "Starter",
+      "region": "latam",
+      "seats": 18,
+      "amount": 0,
+      "status": "free",
+      "owner": "T. Adeyemi"
+    }
+  ],
+  "activity": [
+    {
+      "id": 1,
+      "time": "2026-09-26T07:42:00Z",
+      "type": "deploy",
+      "text": "Billing service v4.12 rolled out to production",
+      "meta": "12 min"
+    },
+    {
+      "id": 2,
+      "time": "2026-09-25T16:05:00Z",
+      "type": "alert",
+      "text": "Churn above 2.5 % in the APAC Starter segment",
+      "meta": "16 h"
+    },
+    {
+      "id": 3,
+      "time": "2026-09-25T09:18:00Z",
+      "type": "signup",
+      "text": "184 new workspaces created (weekly high)",
+      "meta": "1 d"
+    },
+    {
+      "id": 4,
+      "time": "2026-09-24T11:30:00Z",
+      "type": "review",
+      "text": "Enterprise renewal flagged for manual review",
+      "meta": "2 d"
+    },
+    {
+      "id": 5,
+      "time": "2026-09-23T14:52:00Z",
+      "type": "goal",
+      "text": "Q3 NPS goal of 60 reached (actual 62)",
+      "meta": "3 d"
+    }
+  ]
+};
+
+  // Marker so the app can tell a fallback load apart from a live fetch.
+  NS.FALLBACK = true;
+})(window);

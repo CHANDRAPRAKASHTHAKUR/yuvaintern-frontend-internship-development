@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Fieldnotes is an independent blog about accessible product design. This article explains how to build interfaces that work for everyone, with a full WCAG 2.1 AA audit." />
+  <meta name="author" content="Chandra Prakash Thakur" />
+  <title>Designing interfaces that work for everyone — Fieldnotes</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231d4ed8'/><path d='M26 26h20v48H26zM54 26h20v14H54zM54 48h20v26H54z' fill='white'/></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/main.js" defer></script>
+</head>
+
+<body data-theme="light" data-contrast="normal">
+
+  <!-- 1) Skip link — the very first focusable element on the page -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <a class="skip-link" href="#article-body">Skip to article text</a>
+
+  <!-- ============================================================ -->
+  <!-- Accessibility toolbar: text size, contrast and theme        -->
+  <!-- ============================================================ -->
+  <div class="a11y-bar" role="region" aria-label="Accessibility settings">
+    <div class="a11y-bar__inner">
+      <p class="a11y-bar__label" id="a11y-bar-label">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="a11y-bar__icon">
+          <circle cx="12" cy="4.5" r="2" /><path d="M4 8.5h16v2a8 8 0 0 1-7 7.9V22h-2v-3.6A8 8 0 0 1 4 10.5Z" />
+        </svg>
+        Accessibility
+      </p>
+
+      <div class="a11y-bar__group" role="group" aria-labelledby="a11y-bar-label">
+        <button class="a11y-btn" type="button" data-textsize="down" aria-label="Decrease text size">
+          <span aria-hidden="true">A−</span>
+        </button>
+        <span class="a11y-readout" id="textsize-readout" aria-live="polite">Text size 100%</span>
+        <button class="a11y-btn" type="button" data-textsize="up" aria-label="Increase text size">
+          <span aria-hidden="true">A+</span>
+        </button>
+      </div>
+
+      <div class="a11y-bar__group" role="group" aria-label="Colour contrast">
+        <button class="a11y-btn" type="button" data-contrast aria-pressed="false">High contrast</button>
+        <button class="a11y-btn" type="button" data-theme-toggle>
+          <span aria-hidden="true">◐</span> Dark theme
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== HEADER ============================== -->
+  <header class="masthead">
+    <div class="wrap masthead__inner">
+      <a class="logo" href="#main" aria-label="Fieldnotes — home">
+        <span class="logo__glyph" aria-hidden="true">▚</span>
+        <span class="logo__word">Fieldnotes</span>
+      </a>
+
+      <!-- Primary navigation with the current page marked -->
+      <nav class="site-nav" aria-label="Main">
+        <ul class="site-nav__list">
+          <li><a href="#main" aria-current="page">Articles</a></li>
+          <li><a href="#topics">Topics</a></li>
+          <li><a href="#newsletter">Newsletter</a></li>
+          <li><a href="#comments">Comments</a></li>
+        </ul>
+      </nav>
+
+      <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="sr-only">Open navigation menu</span>
+      </button>
+    </div>
+
+    <!-- Mobile navigation drawer -->
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Main (mobile)" hidden>
+      <ul>
+        <li><a href="#main">Articles</a></li>
+        <li><a href="#topics">Topics</a></li>
+        <li><a href="#newsletter">Newsletter</a></li>
+        <li><a href="#comments">Comments</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============================== MAIN ============================== -->
+  <main class="wrap" id="main" tabindex="-1">
+
+    <!-- BREADCRUMB: nav + ordered list + aria-current -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="#main">Home</a></li>
+        <li><a href="#main">Accessibility</a></li>
+        <li><span aria-current="page">Designing interfaces that work for everyone</span></li>
+      </ol>
+    </nav>
+
+    <div class="layout">
+
+      <!-- -------------------------- ARTICLE -------------------------- -->
+      <article class="post" id="article-body" aria-labelledby="post-title" tabindex="-1">
+
+        <header class="post__head">
+          <p class="post__kicker">
+            <span class="tag">Accessibility</span>
+            <span class="post__meta">
+              <time datetime="2026-03-18">18 March 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>11 minute read</span>
+            </span>
+          </p>
+
+          <h1 class="post__title" id="post-title">Designing interfaces that work for everyone</h1>
+
+          <p class="post__standfirst">
+            Roughly one in six people live with a disability that affects how they use the
+            web. Accessibility is not a special mode bolted on at the end — it is a set of
+            engineering decisions that make the product better for everybody. Here is the
+            checklist we actually use.
+          </p>
+
+          <div class="byline">
+            <img class="byline__avatar"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' rx='40' fill='%231d4ed8'/%3E%3Ccircle cx='40' cy='31' r='14' fill='%23bfdbfe'/%3E%3Cpath d='M12 78c4-18 14-26 28-26s24 8 28 26Z' fill='%23bfdbfe'/%3E%3C/svg%3E"
+                 alt="Portrait of Aisha Mensah, the article author"
+                 width="52" height="52" />
+            <p class="byline__text">
+              Written by <a href="#author"><strong>Aisha Mensah</strong></a>,
+              <span class="byline__role">Principal accessibility engineer</span>
+            </p>
+          </div>
+        </header>
+
+        <!-- Decorative image: empty alt so screen readers skip it -->
+        <figure class="post__hero">
+          <img src="assets/hero.svg"
+               alt="Diagram showing a webpage being read by three different assistive technologies: a screen reader, a magnifier and a switch device"
+               width="1200" height="520" />
+          <figcaption>
+            One interface, three very different ways of reading it. Source: Fieldnotes
+            research, 2026.
+          </figcaption>
+        </figure>
+
+        <!-- ---------------- TABLE OF CONTENTS (nav + list) ---------------- -->
+        <nav class="toc" aria-labelledby="toc-title">
+          <h2 class="toc__title" id="toc-title">On this page</h2>
+          <ol class="toc__list">
+            <li><a href="#s-start">Start with the semantics</a></li>
+            <li><a href="#s-keyboard">Keyboard is a feature, not a fallback</a></li>
+            <li><a href="#s-contrast">Contrast and colour</a></li>
+            <li><a href="#s-motion">Respect motion preferences</a></li>
+            <li><a href="#s-forms">Forms that explain themselves</a></li>
+            <li><a href="#s-testing">How we test</a></li>
+          </ol>
+        </nav>
+
+        <!-- ---------------- SECTION 1 ---------------- -->
+        <section class="post__section" aria-labelledby="s-start">
+          <h2 id="s-start">Start with the semantics</h2>
+          <p>
+            The cheapest accessibility fix is the one you never have to write: letting the
+            browser do the work. A <code>&lt;button&gt;</code> is focusable, activatable with
+            both <kbd>Enter</kbd> and <kbd>Space</kbd>, and announced as a button. A
+            <code>&lt;div onclick&gt;</code> is none of those things, and fixing it later means
+            adding a <code>tabindex</code>, two key handlers and a role — at which point you
+            have spent more code than the semantic element would have cost.
+          </p>
+
+          <h3 id="s-start-landmarks">Landmarks first</h3>
+          <p>
+            Screen-reader users navigate a page by landmark, not by scrolling. Every page
+            should expose at least <code>banner</code>, <code>navigation</code>,
+            <code>main</code> and <code>contentinfo</code>. On this site that means
+            <code>&lt;header&gt;</code>, <code>&lt;nav aria-label="Main"&gt;</code>,
+            <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code>. Multiple navigation
+            landmarks must be given unique <code>aria-label</code>s — a screen reader that
+            finds three landmarks all called “navigation” is no help at all.
+          </p>
+
+          <aside class="callout callout--note">
+            <h4 class="callout__title" id="callout-1">Rule of thumb</h4>
+            <p>
+              If you can delete a wrapper <code>&lt;div&gt;</code> and nothing changes
+              visually, it should be a <code>&lt;section&gt;</code> with an accessible name —
+              or nothing at all.
+            </p>
+          </aside>
+
+          <h3 id="s-start-headings">One <code>h1</code>, then never skip a level</h3>
+          <p>
+            Heading levels are the table of contents that assistive technology builds for you.
+            Jumping from <code>h2</code> to <code>h4</code> breaks the outline, and choosing a
+            level for its font size rather than its meaning is the single most common heading
+            bug in production code. This article has exactly one <code>h1</code>, and every
+            section heading is an <code>h2</code> with subsections at <code>h3</code>.
+          </p>
+
+          <figure class="post__figure">
+            <img src="assets/heading-tree.svg"
+                 alt="Side-by-side comparison: a broken heading outline that jumps from level 2 to level 4, and a correct outline that goes level 1, level 2, level 3"
+                 width="1000" height="360" loading="lazy" decoding="async" />
+            <figcaption>
+              Left: skipped levels break the document outline. Right: sequential levels.
+            </figcaption>
+          </figure>
+        </section>
+
+        <!-- ---------------- SECTION 2 ---------------- -->
+        <section class="post__section" aria-labelledby="s-keyboard">
+          <h2 id="s-keyboard">Keyboard is a feature, not a fallback</h2>
+          <p>
+            Every interaction must be possible with a keyboard alone. That means a visible
+            focus indicator, a logical tab order that follows the visual order, and a focus
+            style that survives on coloured backgrounds. We use
+            <code>:focus-visible</code> rather than <code>:focus</code> so mouse users do not
+            see rings on every click, and we never remove an outline without replacing it.
+          </p>
+
+          <div class="table-scroll" tabindex="0" role="region" aria-labelledby="keys-table-caption">
+            <table class="data-table">
+              <caption id="keys-table-caption">
+                Keyboard shortcuts available on this page
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Key</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Applies to</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row"><kbd>/</kbd></th><td>Jump to the comment box</td><td>Whole page</td></tr>
+                <tr><th scope="row"><kbd>t</kbd></th><td>Toggle dark theme</td><td>Whole page</td></tr>
+                <tr><th scope="row"><kbd>?</kbd></th><td>Open the shortcuts dialog</td><td>Whole page</td></tr>
+                <tr><th scope="row"><kbd>Esc</kbd></th><td>Close dialogs and menus</td><td>Dialog, menu</td></tr>
+                <tr><th scope="row"><kbd>Tab</kbd></th><td>Move to the next control</td><td>Everywhere</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note-inline">
+            Tables need <code>&lt;caption&gt;</code> and <code>scope</code> on every header
+            cell; without them a screen reader announces column numbers instead of names.
+          </p>
+
+          <h3 id="s-keyboard-modal">Managing focus in dialogs</h3>
+          <p>
+            When a dialog opens, focus moves into it and stays there. <kbd>Tab</kbd> cycles
+            inside the dialog, <kbd>Esc</kbd> closes it, and focus returns to the exact control
+            that opened it. The rest of the page is hidden with
+            <code>aria-hidden="true"</code> so nothing behind the dialog is reachable.
+            Press <kbd>?</kbd> or use the button below to try it.
+          </p>
+          <p>
+            <button class="btn btn--outline" type="button" data-modal-open="shortcuts-dialog">
+              Open the shortcuts dialog
+              <span class="sr-only">(demonstrates focus trapping)</span>
+            </button>
+          </p>
+
+          <blockquote class="pullquote">
+            <p>
+              “If a task cannot be completed with a keyboard, it does not exist for a
+              meaningful number of people.”
+            </p>
+            <footer>— <cite>Web Accessibility Initiative</cite></footer>
+          </blockquote>
+        </section>
+
+        <!-- ---------------- SECTION 3 ---------------- -->
+        <section class="post__section" aria-labelledby="s-contrast">
+          <h2 id="s-contrast">Contrast and colour</h2>
+          <p>
+            WCAG 2.1 AA requires a contrast ratio of at least <strong>4.5:1</strong> for normal
+            body text, <strong>3:1</strong> for large text (24&nbsp;px, or 18.66&nbsp;px bold)
+            and for the boundaries of user-interface components. Our original palette used a
+            slate grey of <code>#8b93a7</code> on white at 2.9:1 — it failed, and the fix was
+            simply to darken it to <code>#4a5169</code> (7.6:1).
+          </p>
+          <p>
+            Colour is never the only signal. The status badges below use an icon and a text
+            label alongside the colour, so they still work for someone who cannot distinguish
+            red from green.
+          </p>
+
+          <ul class="status-list" aria-label="Article status">
+            <li><span class="badge badge--ok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Reviewed</span> Updated 2 days ago</li>
+            <li><span class="badge badge--warn"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4 2 20h20L12 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Draft sections</span> 1 section pending</li>
+            <li><span class="badge badge--stop"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg> Outdated</span> Figures need regenerating</li>
+          </ul>
+
+          <aside class="callout callout--warn">
+            <h4 class="callout__title" id="callout-2">Watch out</h4>
+            <p>
+              Placeholder text is still text. Chrome renders
+              <code>::placeholder</code> at 54% of the inherited colour, which silently drops
+              a grey placeholder below the contrast threshold. Always set an explicit
+              placeholder colour and keep the label visible.
+            </p>
+          </aside>
+        </section>
+
+        <!-- ---------------- SECTION 4 ---------------- -->
+        <section class="post__section" aria-labelledby="s-motion">
+          <h2 id="s-motion">Respect motion preferences</h2>
+          <p>
+            Animation can trigger nausea, dizziness and migraines for people with vestibular
+            disorders. A single media query handles the whole page:
+          </p>
+          <pre class="code-block" tabindex="0"><code>@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}</code></pre>
+          <p>
+            We also avoid parallax and auto-playing video entirely, and any animation over
+            5&nbsp;seconds can be paused. The reading-progress bar at the top of this article
+            is decorative, so it is hidden from assistive technology with
+            <code>aria-hidden="true"</code>.
+          </p>
+          <div class="progress-bar" aria-hidden="true"><span id="read-progress"></span></div>
+        </section>
+
+        <!-- ---------------- SECTION 5 ---------------- -->
+        <section class="post__section" aria-labelledby="s-forms">
+          <h2 id="s-forms">Forms that explain themselves</h2>
+          <p>
+            Every input needs a real <code>&lt;label&gt;</code>; placeholders are not labels
+            because they disappear the moment someone types. Errors must be described in
+            text, tied to the field with <code>aria-describedby</code>, and announced — a
+            <code>role="alert"</code> paragraph is the simplest reliable way. Required fields
+            are marked with a word, not only an asterisk.
+          </p>
+          <p>
+            Group related checkboxes in a <code>&lt;fieldset&gt;</code> with a
+            <code>&lt;legend&gt;</code>. The example below does exactly that, and the submit
+            result is announced through a polite live region.
+          </p>
+
+          <form class="subscribe" id="author-form" novalidate>
+            <h3 class="subscribe__title" id="author-form-title">Get new articles by email</h3>
+            <p class="subscribe__hint" id="author-form-hint">
+              One email every two weeks. Unsubscribe with one click, any time.
+            </p>
+
+            <div class="field">
+              <label class="field__label" for="author-name">
+                Your name <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input class="field__input" type="text" id="author-name" name="name"
+                     autocomplete="name" required minlength="2"
+                     aria-required="true" aria-describedby="author-name-hint author-name-error" />
+              <p class="field__hint" id="author-name-hint">As it should appear on your comment.</p>
+              <p class="field__error" id="author-name-error" role="alert"></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="author-email">
+                Email address <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input class="field__input" type="email" id="author-email" name="email"
+                     autocomplete="email" required
+                     aria-required="true" aria-describedby="author-email-hint author-email-error" />
+              <p class="field__hint" id="author-email-hint">We never share your address.</p>
+              <p class="field__error" id="author-email-error" role="alert"></p>
+            </div>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Topics you are interested in</legend>
+              <div class="checkbox-grid">
+                <label class="checkbox">
+                  <input type="checkbox" name="topics" value="accessibility" checked />
+                  <span>Accessibility</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="topics" value="performance" />
+                  <span>Performance</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="topics" value="design-systems" />
+                  <span>Design systems</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="topics" value="research" />
+                  <span>User research</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="subscribe__actions">
+              <button class="btn btn--primary" type="submit">Subscribe</button>
+              <button class="btn btn--ghost" type="reset">Clear form</button>
+            </div>
+
+            <!-- Status text is announced politely without moving focus -->
+            <p class="form-status" id="author-form-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <!-- ---------------- SECTION 6 ---------------- -->
+        <section class="post__section" aria-labelledby="s-testing">
+          <h2 id="s-testing">How we test</h2>
+          <p>
+            Automated tools catch roughly a third of accessibility defects — missing labels,
+            broken contrast, absent landmarks. The rest needs a human. Our loop is:
+          </p>
+          <ol class="steps-list">
+            <li><strong>Automated</strong> — Lighthouse and axe run on every pull request and block the merge.</li>
+            <li><strong>Keyboard only</strong> — unplug the mouse and complete the primary task.</li>
+            <li><strong>Screen reader</strong> — NVDA with Firefox and VoiceOver with Safari, at least once per release.</li>
+            <li><strong>Zoom and reflow</strong> — 200% browser zoom and 320&nbsp;px width with no horizontal scrolling (WCAG 1.4.10).</li>
+            <li><strong>People</strong> — quarterly sessions with users who rely on assistive technology.</li>
+          </ol>
+
+          <p>
+            The audit that produced this page is documented in
+            <code>AUDIT-REPORT.md</code>, with each issue, its WCAG success criterion, the
+            technique used and the manual test that verifies the fix.
+          </p>
+        </section>
+
+        <!-- ---------------- AUTHOR + SHARE ---------------- -->
+        <footer class="post__foot">
+          <div class="author-card" id="author">
+            <img class="author-card__avatar"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' rx='40' fill='%231d4ed8'/%3E%3Ccircle cx='40' cy='31' r='14' fill='%23bfdbfe'/%3E%3Cpath d='M12 78c4-18 14-26 28-26s24 8 28 26Z' fill='%23bfdbfe'/%3E%3C/svg%3E"
+                 alt="" width="64" height="64" />
+            <div>
+              <h2 class="author-card__name">Aisha Mensah</h2>
+              <p class="author-card__bio">
+                Principal accessibility engineer. Writes about inclusive design, assistive
+                technology and the business case for doing this properly.
+              </p>
+              <p><a class="link" href="#author">More articles by Aisha</a></p>
+            </div>
+          </div>
+
+          <nav class="share" aria-label="Share this article">
+            <h2 class="share__title">Share this article</h2>
+            <ul class="share__list">
+              <li>
+                <a class="share__link" href="#share">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h4l5.5 7.5L18 3h3l-7 8.5L21 21h-4l-5.8-7.9L4.5 21H2l7.4-9Z" fill="currentColor"/></svg>
+                  <span>X<span class="sr-only"> (opens in a new tab)</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="share__link" href="#share">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.45-2.2 2.96V21H9Z" fill="currentColor"/></svg>
+                  <span>LinkedIn<span class="sr-only"> (opens in a new tab)</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="share__link" href="#share">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4V6a2 2 0 0 1 2-2Z" fill="currentColor"/></svg>
+                  <span>Email<span class="sr-only"> this article</span></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+
+      <!-- =========================== SIDEBAR =========================== -->
+      <aside class="sidebar" aria-label="Related content">
+
+        <!-- Author anchor target -->
+        <section class="side-card" aria-labelledby="side-about-title">
+          <h2 class="side-card__title" id="side-about-title">About the author</h2>
+          <p>Aisha leads the accessibility guild and has shipped accessible products for 12 years.</p>
+        </section>
+
+        <!-- TOPIC LIST (used by the #topics link) -->
+        <section class="side-card" id="topics" aria-labelledby="side-topics-title">
+          <h2 class="side-card__title" id="side-topics-title">Browse by topic</h2>
+          <ul class="topic-list">
+            <li><a href="#topics">Accessibility <span class="count">24</span></a></li>
+            <li><a href="#topics">Performance <span class="count">18</span></a></li>
+            <li><a href="#topics">Design systems <span class="count">12</span></a></li>
+            <li><a href="#topics">User research <span class="count">9</span></a></li>
+            <li><a href="#topics">Career <span class="count">7</span></a></li>
+          </ul>
+        </section>
+
+        <!-- FAQ: native details/summary, fully keyboard accessible -->
+        <section class="side-card" aria-labelledby="side-faq-title">
+          <h2 class="side-card__title" id="side-faq-title">Common questions</h2>
+          <details class="faq">
+            <summary>Is accessibility expensive?</summary>
+            <p>Fixing a defect during design costs a fraction of fixing it after launch. Retrofitting is where projects get expensive.</p>
+          </details>
+          <details class="faq">
+            <summary>Which tools should I use?</summary>
+            <p>Lighthouse and axe-core for automation, then NVDA, VoiceOver and a physical keyboard for everything else.</p>
+          </details>
+          <details class="faq">
+            <summary>Do I need a full audit every release?</summary>
+            <p>An automated pass on every pull request plus a manual review before a major release is a sustainable minimum.</p>
+          </details>
+        </section>
+
+        <!-- NEWSLETTER (target of the #newsletter link) -->
+        <section class="side-card side-card--accent" id="newsletter" aria-labelledby="side-news-title">
+          <h2 class="side-card__title" id="side-news-title">Newsletter</h2>
+          <p>Two emails a month. No spam, no tracking pixels, unsubscribe anytime.</p>
+          <form class="mini-form" id="mini-form" novalidate>
+            <label class="field__label" for="mini-email">Email address</label>
+            <input class="field__input" type="email" id="mini-email" name="email" required
+                   placeholder="you@example.com" autocomplete="email"
+                   aria-describedby="mini-email-error" />
+            <p class="field__error" id="mini-email-error" role="alert"></p>
+            <button class="btn btn--primary btn--block" type="submit">Subscribe</button>
+            <p class="form-status" id="mini-form-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </aside>
+    </div>
+
+    <!-- ============================ COMMENTS ============================ -->
+    <section class="comments" id="comments" aria-labelledby="comments-title" tabindex="-1">
+      <h2 class="comments__title" id="comments-title">
+        Comments <span class="comments__count">(3)</span>
+      </h2>
+
+      <ul class="comment-list">
+        <li class="comment">
+          <img class="comment__avatar"
+               src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%230f766e'/%3E%3Ccircle cx='32' cy='26' r='11' fill='%235eead4'/%3E%3Cpath d='M10 62c3-14 11-21 22-21s19 7 22 21Z' fill='%235eead4'/%3E%3C/svg%3E"
+               alt="" width="44" height="44" />
+          <div class="comment__body">
+            <h3 class="comment__meta">
+              <span class="comment__author">Ravi Kulkarni</span>
+              <time class="comment__time" datetime="2026-03-19">19 March 2026</time>
+            </h3>
+            <p>
+              The point about placeholders disappearing is the one that finally convinced
+              our designers. We removed six of them in a single review.
+            </p>
+          </div>
+        </li>
+
+        <li class="comment">
+          <img class="comment__avatar"
+               src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%237c3aed'/%3E%3Ccircle cx='32' cy='26' r='11' fill='%23ddd6fe'/%3E%3Cpath d='M10 62c3-14 11-21 22-21s19 7 22 21Z' fill='%23ddd6fe'/%3E%3C/svg%3E"
+               alt="" width="44" height="44" />
+          <div class="comment__body">
+            <h3 class="comment__meta">
+              <span class="comment__author">Lena Fischer</span>
+              <time class="comment__time" datetime="2026-03-20">20 March 2026</time>
+            </h3>
+            <p>
+              Would you recommend testing with a screen reader before or after writing the
+              automated axe checks? We keep flip-flopping.
+            </p>
+          </div>
+        </li>
+
+        <li class="comment">
+          <img class="comment__avatar"
+               src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23b45309'/%3E%3Ccircle cx='32' cy='26' r='11' fill='%23fde68a'/%3E%3Cpath d='M10 62c3-14 11-21 22-21s19 7 22 21Z' fill='%23fde68a'/%3E%3C/svg%3E"
+               alt="" width="44" height="44" />
+          <div class="comment__body">
+            <h3 class="comment__meta">
+              <span class="comment__author">Tom Adeyemi</span>
+              <time class="comment__time" datetime="2026-03-22">22 March 2026</time>
+            </h3>
+            <p>
+              Automation first — it is cheap and repeatable — then a human pass with the
+              keyboard before you ship. Screen-reader passes belong to release day.
+            </p>
+          </div>
+        </li>
+      </ul>
+
+      <form class="comment-form" id="comment-form" novalidate>
+        <h3 class="comment-form__title">Add a comment</h3>
+        <p class="field__hint" id="comment-form-hint">All fields are required. Press <kbd>/</kbd> to jump straight here.</p>
+
+        <div class="field">
+          <label class="field__label" for="comment-name">Name <span class="req" aria-hidden="true">*</span></label>
+          <input class="field__input" type="text" id="comment-name" name="name" required minlength="2"
+                 autocomplete="name" aria-required="true" aria-describedby="comment-name-error" />
+          <p class="field__error" id="comment-name-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="comment-body-field">Comment <span class="req" aria-hidden="true">*</span></label>
+          <textarea class="field__input field__input--area" id="comment-body-field" name="body" rows="4" required
+                    minlength="10" aria-required="true" aria-describedby="comment-body-hint comment-body-error"></textarea>
+          <p class="field__hint" id="comment-body-hint">Minimum 10 characters. Plain text only.</p>
+          <p class="field__error" id="comment-body-error" role="alert"></p>
+        </div>
+
+        <div class="subscribe__actions">
+          <button class="btn btn--primary" type="submit">Post comment</button>
+        </div>
+        <p class="form-status" id="comment-form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="site-footer">
+    <div class="wrap footer__inner">
+      <div class="footer__col">
+        <h2 class="footer__title">Fieldnotes</h2>
+        <p>An independent publication about building products that include everyone.</p>
+      </div>
+      <nav class="footer__col" aria-label="Footer: articles">
+        <h2 class="footer__title">Articles</h2>
+        <ul><li><a href="#main">Accessibility</a></li><li><a href="#main">Performance</a></li><li><a href="#main">Design systems</a></li></ul>
+      </nav>
+      <nav class="footer__col" aria-label="Footer: about">
+        <h2 class="footer__title">About</h2>
+        <ul><li><a href="#author">Authors</a></li><li><a href="#author">Editorial policy</a></li><li><a href="#author">Contact</a></li></ul>
+      </nav>
+      <nav class="footer__col" aria-label="Footer: legal">
+        <h2 class="footer__title">Legal</h2>
+        <ul><li><a href="#author">Privacy</a></li><li><a href="#author">Accessibility statement</a></li><li><a href="#author">Terms</a></li></ul>
+      </nav>
+    </div>
+    <p class="footer__legal">&copy; 2026 Fieldnotes. Text and images released under CC BY 4.0.</p>
+    <p class="credit">Demo page designed &amp; built by <strong>Chandra Prakash Thakur</strong> for the Week 3 accessibility audit.</p>
+  </footer>
+
+  <!-- ====================== SHORTCUTS DIALOG ====================== -->
+  <div class="modal" id="shortcuts-dialog" role="dialog" aria-modal="true"
+       aria-labelledby="shortcuts-title" hidden>
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="document">
+      <div class="modal__head">
+        <h2 class="modal__title" id="shortcuts-title">Keyboard shortcuts</h2>
+        <button class="modal__close" type="button" data-modal-close aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p class="sr-only" id="shortcuts-desc">Press Escape to close this dialog. Tab cycles inside it.</p>
+        <dl class="shortcut-list">
+          <div><dt><kbd>/</kbd></dt><dd>Focus the comment field</dd></div>
+          <div><dt><kbd>t</kbd></dt><dd>Toggle dark theme</dd></div>
+          <div><dt><kbd>?</kbd></dt><dd>Open this dialog</dd></div>
+          <div><dt><kbd>Esc</kbd></dt><dd>Close dialogs</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Polite live region used for theme / text-size announcements -->
+  <p class="sr-only" id="a11y-live" role="status" aria-live="polite"></p>
+</body>
+</html>

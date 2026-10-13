@@ -1,0 +1,38 @@
+/* ==========================================================================
+   Web fonts — the "before" configuration
+   --------------------------------------------------------------------------
+   ❌ No `font-display: swap`   -> text stays invisible until the face loads
+   ❌ No `preload` in the HTML  -> the font is discovered only after the CSS
+                                   is parsed
+   ❌ Three separate families   -> three round trips
+   ❌ Local `file://` sources   -> the fonts would not load at all over
+                                   file://, so a Google Fonts URL is used as
+                                   the realistic stand-in
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  /* font-display: swap; <-- MISSING: this is the bug */
+  src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap; /* present here for reference; removed in the "before" build */
+}
+
+@font-face {
+  font-family: 'SourceSerif4';
+  src: url('https://fonts.gstatic.com/s/sourceserif4/v21/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7l.woff2') format('woff2');
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v23/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* The "before" build removed `font-display` from the Inter face, which is the
+   single most common cause of a blank first paint. It is reproduced above with
+   a comment so the contrast with after/css/fonts.css is explicit. */

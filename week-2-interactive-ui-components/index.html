@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NovaUI — a dependency-free, fully accessible component library built with vanilla JavaScript: modal, accordion, tabs, menu, switch, slider, toast and tooltip." />
+  <meta name="author" content="Chandra Prakash Thakur" />
+  <title>NovaUI — Accessible Vanilla JS Component Library</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230d9488'/><path d='M30 70V30h9l22 24V30h9v40h-9L39 46v24z' fill='white'/></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/components.js" defer></script>
+</head>
+
+<body data-theme="light">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============================== TOP BAR ============================== -->
+  <header class="topbar">
+    <div class="shell topbar__inner">
+      <p class="topbar__brand">
+        <span class="topbar__logo" aria-hidden="true">◆</span>
+        NovaUI
+        <span class="topbar__tag">Component library</span>
+      </p>
+
+      <div class="topbar__actions">
+        <button class="ui-switch" type="button" data-switch="motion" aria-label="Reduce animations">
+          <span class="ui-switch__track" aria-hidden="true"><span class="ui-switch__thumb"></span></span>
+          <span class="ui-switch__label">Reduce motion</span>
+        </button>
+
+        <button class="btn btn--ghost" type="button" data-modal-open="demo-modal">Open modal</button>
+        <button class="btn btn--primary" type="button" data-toast='{"message":"Nice — everything is keyboard friendly!","variant":"success"}'>
+          Show toast
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== SIDEBAR NAV ============================== -->
+  <div class="shell layout">
+    <nav class="sidenav" id="sidenav" aria-label="Components">
+      <p class="sidenav__title" id="sidenav-title">Components</p>
+      <ul class="sidenav__list">
+        <li><a class="sidenav__link" href="#modal">Modal dialog</a></li>
+        <li><a class="sidenav__link" href="#accordion">Accordion</a></li>
+        <li><a class="sidenav__link" href="#tabs">Tabs</a></li>
+        <li><a class="sidenav__link" href="#menu">Dropdown menu</a></li>
+        <li><a class="sidenav__link" href="#switch">Switch &amp; checkbox</a></li>
+        <li><a class="sidenav__link" href="#slider">Range slider</a></li>
+        <li><a class="sidenav__link" href="#tooltip">Tooltip</a></li>
+        <li><a class="sidenav__link" href="#toast">Toast notifications</a></li>
+        <li><a class="sidenav__link" href="#progress">Progress &amp; rating</a></li>
+      </ul>
+
+      <p class="sidenav__note">
+        Every component below is built with <strong>plain HTML, CSS and JavaScript</strong> —
+        no framework, no library. Tab through the page and try the arrow keys,
+        <kbd>Enter</kbd>, <kbd>Space</kbd>, <kbd>Esc</kbd> and <kbd>Home</kbd>/<kbd>End</kbd>.
+      </p>
+    </nav>
+
+    <!-- ================================ MAIN ================================ -->
+    <main class="content" id="main" tabindex="-1">
+
+      <!-- ---------- HERO ---------- -->
+      <section class="intro" aria-labelledby="intro-title">
+        <h1 class="intro__title" id="intro-title">Interactive UI components, vanilla JavaScript</h1>
+        <p class="intro__lead">
+          Eight production-ready components. Each one is a small ES5-compatible class with
+          no dependencies, full ARIA semantics and complete keyboard support. Resize the
+          window to see the layout adapt from a two-column grid to a single column.
+        </p>
+        <p class="intro__meta">
+          <span class="pill pill--ok">0 dependencies</span>
+          <span class="pill">~700 lines of JS</span>
+          <span class="pill">WCAG 2.1 AA patterns</span>
+        </p>
+      </section>
+
+      <!-- ========================= 1. MODAL DIALOG ========================= -->
+      <section class="demo" id="modal" aria-labelledby="modal-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="modal-title"><span class="demo__num">01</span> Modal dialog</h2>
+          <p class="demo__desc">
+            Opens in the top layer with a translucent backdrop. Focus is trapped inside,
+            <kbd>Esc</kbd> closes it, the background is marked <code>inert</code>, and focus
+            returns to the trigger button on close.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="demo__row">
+            <button class="btn btn--primary" type="button" data-modal-open="demo-modal">Open basic modal</button>
+            <button class="btn btn--outline" type="button" data-modal-open="form-modal">Open form modal</button>
+            <button class="btn btn--outline" type="button" data-modal-open="confirm-modal">Open confirm dialog</button>
+          </div>
+
+          <p class="demo__hint">
+            Programmatic API: <code>NovaUI.modal.open('demo-modal')</code> ·
+            <code>NovaUI.modal.close()</code>
+          </p>
+
+          <pre class="code" tabindex="0" aria-label="Modal JavaScript example"><code>document.querySelectorAll('[data-modal-open]').forEach(btn =&gt; {
+  btn.addEventListener('click', () =&gt; NovaUI.modal.open(btn.dataset.modalOpen));
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- ========================= 2. ACCORDION ========================= -->
+      <section class="demo" id="accordion" aria-labelledby="accordion-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="accordion-title"><span class="demo__num">02</span> Accordion</h2>
+          <p class="demo__desc">
+            A single-expandible accordion. Headers are real <code>&lt;button&gt;</code>
+            elements with <code>aria-expanded</code> and <code>aria-controls</code>; panels
+            animate height without breaking keyboard order.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="accordion" data-accordion data-accordion-single data-accordion-multi="false">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" id="acc-trigger-1" aria-expanded="true" aria-controls="acc-panel-1">
+                <span class="accordion__label">How is the height transition done without layout jank?</span>
+                <span class="accordion__marker" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="acc-panel-1" role="region" aria-labelledby="acc-trigger-1">
+              <div class="accordion__content">
+                <p>
+                  The panel is measured once with <code>scrollHeight</code> and then animated
+                  from <code>0</code> to that pixel value using a CSS custom property. After the
+                  transition ends, the inline height is removed so the panel can reflow freely
+                  when the window resizes.
+                </p>
+              </div>
+            </div>
+
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" id="acc-trigger-2" aria-expanded="false" aria-controls="acc-panel-2">
+                <span class="accordion__label">Can several panels be open at once?</span>
+                <span class="accordion__marker" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="acc-panel-2" role="region" aria-labelledby="acc-trigger-2">
+              <div class="accordion__content">
+                <p>
+                  Yes. Toggle the <strong>“Allow multiple open panels”</strong> control below —
+                  it sets <code>data-accordion-multi</code> to <code>true</code> and the
+                  accordion stops closing its siblings.
+                </p>
+              </div>
+            </div>
+
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" id="acc-trigger-3" aria-expanded="false" aria-controls="acc-panel-3">
+                <span class="accordion__label">Which ARIA roles are used?</span>
+                <span class="accordion__marker" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="acc-panel-3" role="region" aria-labelledby="acc-trigger-3">
+              <div class="accordion__content">
+                <p>
+                  Headings wrap the triggers so screen-reader users can navigate by heading and
+                  jump straight to a question. Each panel is a labelled <code>region</code>, which
+                  means it is reachable in the landmarks list and announces its own title.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo__row demo__row--tight">
+            <label class="checkbox">
+              <input type="checkbox" data-accordion-multi-toggle />
+              <span>Allow multiple open panels</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= 3. TABS ========================= -->
+      <section class="demo" id="tabs" aria-labelledby="tabs-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="tabs-title"><span class="demo__num">03</span> Tabs</h2>
+          <p class="demo__desc">
+            Implements the WAI-ARIA authoring practices for tabs: a roving <code>tabindex</code>,
+            <kbd>←</kbd>/<kbd>→</kbd> to move, <kbd>Home</kbd>/<kbd>End</kbd> to jump, automatic
+            activation, and panels wired with <code>aria-labelledby</code> / <code>aria-controls</code>.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="tabs" data-tabs>
+            <div class="tabs__list" role="tablist" aria-label="Deployment environments">
+              <button class="tabs__tab" type="button" role="tab" id="tab-preview"
+                      aria-selected="true" aria-controls="panel-preview" tabindex="0">Preview</button>
+              <button class="tabs__tab" type="button" role="tab" id="tab-install"
+                      aria-selected="false" aria-controls="panel-install" tabindex="-1">Install</button>
+              <button class="tabs__tab" type="button" role="tab" id="tab-api"
+                      aria-selected="false" aria-controls="panel-api" tabindex="-1">API</button>
+              <button class="tabs__tab" type="button" role="tab" id="tab-changelog"
+                      aria-selected="false" aria-controls="panel-changelog" tabindex="-1">Changelog</button>
+            </div>
+
+            <div class="tabs__panel" id="panel-preview" role="tabpanel" tabindex="0" aria-labelledby="tab-preview">
+              <div class="preview">
+                <div class="preview__chrome">
+                  <span class="dot dot--red"></span><span class="dot dot--amber"></span><span class="dot dot--green"></span>
+                  <span class="preview__url">cdn.novaui.dev/v2/button.min.css</span>
+                </div>
+                <div class="preview__body">
+                  <button class="btn btn--primary" type="button" disabled>Primary action</button>
+                  <button class="btn btn--outline" type="button" disabled>Secondary</button>
+                  <span class="pill pill--ok">12.4 kB gzip</span>
+                </div>
+              </div>
+              <p class="tabs__note">A rendered button component — visually identical to the ones used on this page.</p>
+            </div>
+
+            <div class="tabs__panel" id="panel-install" role="tabpanel" tabindex="0" aria-labelledby="tab-install" hidden>
+              <pre class="code"><code># via CDN
+&lt;link rel="stylesheet" href="https://cdn.novaui.dev/v2/button.min.css"&gt;
+
+# via npm
+npm install @novaui/components@2.4.1</code></pre>
+            </div>
+
+            <div class="tabs__panel" id="panel-api" role="tabpanel" tabindex="0" aria-labelledby="tab-api" hidden>
+              <table class="table">
+                <caption>Public methods of the Modal class</caption>
+                <thead>
+                  <tr><th scope="col">Method</th><th scope="col">Returns</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>open(id)</code></td><td><code>void</code></td><td>Opens the dialog with the given id and traps focus.</td></tr>
+                  <tr><td><code>close()</code></td><td><code>void</code></td><td>Closes the top-most dialog and restores focus.</td></tr>
+                  <tr><td><code>destroy()</code></td><td><code>void</code></td><td>Removes listeners and restores the DOM to its original state.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="tabs__panel" id="panel-changelog" role="tabpanel" tabindex="0" aria-labelledby="tab-changelog" hidden>
+              <ul class="changelog">
+                <li><span class="pill pill--ok">2.4.1</span> Fixed focus restore when a dialog is closed by a backdrop click.</li>
+                <li><span class="pill">2.4.0</span> Added <code>role="switch"</code> support and 4 new component recipes.</li>
+                <li><span class="pill">2.3.2</span> Reduced bundle size by 18&nbsp;kB by moving date formatting to an optional plugin.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= 4. DROPDOWN MENU ========================= -->
+      <section class="demo" id="menu" aria-labelledby="menu-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="menu-title"><span class="demo__num">04</span> Dropdown menu</h2>
+          <p class="demo__desc">
+            An ARIA <code>menu</code> with a <code>menuitem</code> list, roving focus,
+            type-ahead, <kbd>Esc</kbd> to dismiss, and arrow keys to wrap around.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="menu" data-menu>
+            <button class="btn btn--outline menu__trigger" type="button"
+                    id="menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="menu-list">
+              Actions
+              <svg class="menu__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <ul class="menu__list" id="menu-list" role="menu" aria-labelledby="menu-trigger" hidden>
+              <li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate project</button></li>
+              <li role="none"><button class="menu__item" type="button" role="menuitem">Move to archive</button></li>
+              <li role="none"><button class="menu__item" type="button" role="menuitem">Export as CSV</button></li>
+              <li class="menu__sep" role="separator"></li>
+              <li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete project…</button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 5. SWITCH & CHECKBOX ==================== -->
+      <section class="demo" id="switch" aria-labelledby="switch-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="switch-title"><span class="demo__num">05</span> Switch &amp; checkbox</h2>
+          <p class="demo__desc">
+            A toggle built on <code>role="switch"</code> with <code>aria-checked</code>, operable
+            with <kbd>Space</kbd> or <kbd>Enter</kbd> and a 200&nbsp;ms thumb animation.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="switch-list">
+            <button class="ui-switch" type="button" data-switch="notifications" role="switch" aria-checked="true">
+              <span class="ui-switch__track" aria-hidden="true"><span class="ui-switch__thumb"></span></span>
+              <span class="ui-switch__label">Email notifications</span>
+            </button>
+
+            <button class="ui-switch" type="button" data-switch="digest" role="switch" aria-checked="false">
+              <span class="ui-switch__track" aria-hidden="true"><span class="ui-switch__thumb"></span></span>
+              <span class="ui-switch__label">Weekly digest</span>
+            </button>
+
+            <button class="ui-switch" type="button" data-switch="beta" role="switch" aria-checked="false">
+              <span class="ui-switch__track" aria-hidden="true"><span class="ui-switch__thumb"></span></span>
+              <span class="ui-switch__label">Join the beta channel</span>
+            </button>
+          </div>
+
+          <p class="demo__status" role="status" aria-live="polite" id="switch-status">
+            Switch state is announced by the screen reader through <code>aria-checked</code>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ========================= 6. RANGE SLIDER ========================= -->
+      <section class="demo" id="slider" aria-labelledby="slider-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="slider-title"><span class="demo__num">06</span> Range slider</h2>
+          <p class="demo__desc">
+            A custom range input with a filled track, a live value output and full keyboard
+            support (arrows, <kbd>Page&nbsp;Up</kbd>/<kbd>Page&nbsp;Down</kbd>, <kbd>Home</kbd>/<kbd>End</kbd>).
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="slider">
+            <label class="slider__label" for="team-size">Team size</label>
+            <input class="slider__input" type="range" id="team-size" min="1" max="50" step="1" value="12"
+                   aria-describedby="team-size-output" />
+            <output class="slider__output" id="team-size-output" for="team-size">12 people</output>
+            <div class="slider__ticks" aria-hidden="true"><span>1</span><span>25</span><span>50</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= 7. TOOLTIP ========================= -->
+      <section class="demo" id="tooltip" aria-labelledby="tooltip-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="tooltip-title"><span class="demo__num">07</span> Tooltip</h2>
+          <p class="demo__desc">
+            Shown on hover <em>and</em> focus, wired with <code>aria-describedby</code>, dismissed
+            with <kbd>Esc</kbd>, and positioned above the trigger unless there is no room.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="demo__row">
+            <button class="btn btn--outline" type="button" data-tooltip="Copied! NovaUI has no dependencies.">
+              Hover or focus me
+            </button>
+            <button class="btn btn--outline" type="button" data-tooltip="Placed below because there is no space above." data-tooltip-placement="bottom">
+              Placement: bottom
+            </button>
+            <span class="icon-btn" tabindex="0" role="img" data-tooltip="Tooltips also work on non-button elements with a role and tabindex.">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-6h2Zm0-8h-2V7h2Z" fill="currentColor"/></svg>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= 8. TOASTS ========================= -->
+      <section class="demo" id="toast" aria-labelledby="toast-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="toast-title"><span class="demo__num">08</span> Toast notifications</h2>
+          <p class="demo__desc">
+            Stacked, auto-dismissing messages rendered into an <code>aria-live="polite"</code>
+            region so they are announced without stealing focus. Hovering pauses the timer.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="demo__row">
+            <button class="btn btn--primary" type="button" data-toast='{"message":"Deployment finished in 42s.","variant":"success"}'>Success toast</button>
+            <button class="btn btn--outline" type="button" data-toast='{"message":"2 tests failed on the staging build.","variant":"danger"}'>Error toast</button>
+            <button class="btn btn--outline" type="button" data-toast='{"message":"Your report is being generated.","variant":"info"}'>Info toast</button>
+            <button class="btn btn--ghost" type="button" data-toast='{"message":"5 notifications stacked at once.","variant":"info","count":5}'>Stack 5 toasts</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== 9. PROGRESS + RATING (bonus) ============== -->
+      <section class="demo" id="progress" aria-labelledby="progress-title">
+        <header class="demo__head">
+          <h2 class="demo__title" id="progress-title"><span class="demo__num">09</span> Progress &amp; rating</h2>
+          <p class="demo__desc">
+            A determinate <code>progressbar</code> animated by JavaScript, and a star rating
+            widget that is fully operable with arrow keys.
+          </p>
+        </header>
+
+        <div class="demo__stage">
+          <div class="progress-demo">
+            <div class="progress-demo__row">
+              <button class="btn btn--primary" type="button" id="progress-start">Run upload</button>
+              <span class="progress-demo__hint" id="progress-label">Idle</span>
+            </div>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                 aria-labelledby="progress-title" id="progress-demo">
+              <div class="progress__bar" id="progress-bar"></div>
+            </div>
+
+            <div class="rating" data-rating role="radiogroup" aria-labelledby="rating-label">
+              <span class="rating__label" id="rating-label">Rate this component set</span>
+              <span class="rating__stars">
+                <button class="rating__star" type="button" role="radio" aria-checked="false" data-value="1" aria-label="1 star">★</button>
+                <button class="rating__star" type="button" role="radio" aria-checked="false" data-value="2" aria-label="2 stars">★</button>
+                <button class="rating__star" type="button" role="radio" aria-checked="false" data-value="3" aria-label="3 stars">★</button>
+                <button class="rating__star" type="button" role="radio" aria-checked="false" data-value="4" aria-label="4 stars">★</button>
+                <button class="rating__star" type="button" role="radio" aria-checked="true" data-value="5" aria-label="5 stars">★</button>
+              </span>
+              <span class="rating__value" id="rating-value" role="status" aria-live="polite">5 out of 5</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pagefoot">
+        <p>NovaUI · built for the Week 2 task: <em>“Developing Interactive UI Components”</em> · pure HTML, CSS &amp; vanilla JavaScript.</p>
+        <p class="credit">Designed &amp; built by <strong>Chandra Prakash Thakur</strong></p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Mobile sidenav toggle (only visible under 960px) -->
+  <button class="sidenav-fab" type="button" id="sidenav-fab" aria-expanded="false" aria-controls="sidenav" aria-label="Show component list">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+
+  <!-- ============================== MODALS ============================== -->
+  <!-- 1) Basic informational modal -->
+  <div class="modal" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" aria-describedby="demo-modal-desc" hidden>
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="document">
+      <header class="modal__head">
+        <h2 class="modal__title" id="demo-modal-title">Keyboard support cheat sheet</h2>
+        <button class="modal__close" type="button" data-modal-close aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+      <div class="modal__body" id="demo-modal-desc">
+        <p>Inside this dialog, <kbd>Tab</kbd> and <kbd>Shift+Tab</kbd> cycle through the focusable elements and never escape the dialog.</p>
+        <ul class="keylist">
+          <li><kbd>Esc</kbd><span>Close the dialog and return focus to the trigger</span></li>
+          <li><kbd>Tab</kbd><span>Move to the next control</span></li>
+          <li><kbd>Enter</kbd><span>Activate the focused button</span></li>
+        </ul>
+        <p class="modal__note">Try it: press <kbd>Tab</kbd> a few times — the focus will loop back to the close button.</p>
+      </div>
+      <footer class="modal__foot">
+        <button class="btn btn--primary" type="button" data-modal-close>Got it</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- 2) Modal containing a form with validation -->
+  <div class="modal" id="form-modal" role="dialog" aria-modal="true" aria-labelledby="form-modal-title" hidden>
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="document">
+      <header class="modal__head">
+        <h2 class="modal__title" id="form-modal-title">Invite a teammate</h2>
+        <button class="modal__close" type="button" data-modal-close aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+      <form class="modal__body form" id="invite-form" novalidate>
+        <div class="field">
+          <label class="field__label" for="invite-email">Email address</label>
+          <input class="field__input" type="email" id="invite-email" name="email" required
+                 autocomplete="email" aria-describedby="invite-email-error" />
+          <p class="field__error" id="invite-email-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="invite-role">Role</label>
+          <select class="field__input" id="invite-role" name="role">
+            <option>Member</option><option>Admin</option><option>Guest (read only)</option>
+          </select>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" name="welcome" checked />
+          <span>Send the welcome email with a quick-start guide</span>
+        </label>
+        <footer class="modal__foot">
+          <button class="btn btn--ghost" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--primary" type="submit">Send invite</button>
+        </footer>
+        <p class="form__status" id="invite-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3) Destructive confirmation -->
+  <div class="modal modal--danger" id="confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-desc" hidden>
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="document">
+      <header class="modal__head">
+        <h2 class="modal__title" id="confirm-modal-title">Delete “Marketing site”?</h2>
+        <button class="modal__close" type="button" data-modal-close aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+      <div class="modal__body" id="confirm-modal-desc">
+        <p>This permanently removes the project, its 128 tasks and all attached files. This action cannot be undone.</p>
+      </div>
+      <footer class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-modal-close>Keep project</button>
+        <button class="btn btn--danger" type="button" id="confirm-delete">Delete permanently</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Live region for all toasts: aria-live + aria-relevant make screen readers
+       announce new messages politely without stealing keyboard focus -->
+  <div class="toast-region" id="toast-region" role="region" aria-label="Notifications"
+       aria-live="polite" aria-relevant="additions"></div>
+</body>
+</html>

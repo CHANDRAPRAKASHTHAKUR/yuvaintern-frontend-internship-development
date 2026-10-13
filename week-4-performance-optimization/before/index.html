@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Northwind Analytics — Product Overview (LEGACY BUILD)</title>
+  <meta name="author" content="Chandra Prakash Thakur" />
+
+  <link rel="icon" href="data:,">
+
+  <!--
+    ======================================================================
+     BEFORE — the un-optimised starting point for Week 4.
+     Every anti-pattern listed in the performance report is present here so
+     the "after" numbers can be compared against a real baseline.
+     ======================================================================
+  -->
+
+  <!-- ❌ 1. THREE render-blocking stylesheets, none minified, 237 KB total -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- ❌ 2. THREE render-blocking scripts in <head>, 117 KB total, no defer/async -->
+  <script src="js/vendor.js"></script>
+  <script src="js/widget.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- ❌ 3. Web fonts with no font-display and no preconnect/preload:
+          text is invisible until all three faces have downloaded. -->
+  <link rel="stylesheet" href="css/fonts.css">
+
+  <!-- ❌ 4. A 60 KB base64 image inlined into the CSS-embedded hero background:
+          it cannot be cached separately and delays first paint. -->
+  <style>
+    .hero {
+      background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==");
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+
+<body class="theme-light">
+
+  <div class="navbar">
+    <div class="container">
+      <h1 class="logo">Northwind Analytics</h1>
+      <ul class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ❌ 5. A 3200 x 2400 (5.3 MB) hero image, unsized, not lazy-loaded,
+            served at full resolution to a 360 px phone viewport. -->
+    <section class="hero" id="overview">
+      <img src="assets/hero-photo-3200x2400.jpg" alt="The Northwind team at work">
+      <div class="hero-overlay">
+        <h2 class="hero-title">Answers, not more dashboards</h2>
+        <p class="hero-text">
+          Northwind turns your product data into decisions your team can act on the same day.
+        </p>
+        <a class="btn btn-primary" href="#contact">Book a demo</a>
+      </div>
+    </section>
+
+    <!-- ❌ 6. Feature cards each loading a separate large photograph,
+            none of them lazy, none of them sized. -->
+    <section class="features" id="features">
+      <h2 class="section-title">What you get</h2>
+
+      <div class="row">
+        <div class="col col-md-4">
+          <div class="card">
+            <!-- ❌ 7. Same 2400 x 1800 image used three times: 9 MB of duplicate download -->
+            <img src="assets/team-photo-2400x1800.jpg" alt="">
+            <div class="card-body">
+              <h3 class="card-title">Warehouse-native</h3>
+              <p class="card-text">Query your existing Snowflake or BigQuery tables without moving a byte.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-md-4">
+          <div class="card">
+            <img src="assets/team-photo-2400x1800.jpg" alt="">
+            <div class="card-body">
+              <h3 class="card-title">Row-level security</h3>
+              <p class="card-text">Every metric respects the permissions of the person asking for it.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-md-4">
+          <div class="card">
+            <img src="assets/team-photo-2400x1800.jpg" alt="">
+            <div class="card-body">
+              <h3 class="card-title">Alerting that explains</h3>
+              <p class="card-text">Alerts include the change, the cause and the owner in one sentence.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonial" id="pricing">
+      <h2 class="section-title">Loved by data teams</h2>
+      <blockquote class="panel">
+        <p class="panel-text">
+          &ldquo;We replaced four internal tools with Northwind and our weekly reporting
+          went from two days to forty minutes.&rdquo;
+        </p>
+        <p class="panel-text"><strong>Marcus Bell</strong> — Head of Data, Vertex</p>
+      </blockquote>
+      <div class="row">
+        <div class="col col-md-6">
+          <img src="assets/office-photo-2000x1500.jpg" alt="The Vertex analytics floor">
+        </div>
+        <div class="col col-md-6">
+          <!-- ❌ 8. A 40-row pricing table built with 40 individually styled cells
+                  and no table markup at all (it is divs). -->
+          <h3 class="card-title">Plans</h3>
+          <div class="pricing">
+            <div class="pricing-card"><h4>Starter</h4><p class="card-text">$0 / user / month</p></div>
+            <div class="pricing-card"><h4>Growth</h4><p class="card-text">$19 / user / month</p></div>
+            <div class="pricing-card"><h4>Scale</h4><p class="card-text">$49 / user / month</p></div>
+            <div class="pricing-card"><h4>Enterprise</h4><p class="card-text">Custom pricing</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter" id="contact">
+      <h2 class="section-title">Talk to us</h2>
+      <form class="form" id="lead-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Work email</label>
+          <input class="form-control" type="email" id="email" name="email" placeholder="you@company.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="size">Team size</label>
+          <select class="form-control" id="size" name="size">
+            <option>1-10</option><option>11-50</option><option>51-200</option><option>200+</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit">Request a demo</button>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <p class="footer-text">&copy; 2026 Northwind Analytics. All rights reserved.</p>
+      <!-- Author credit. Inline style on purpose: css/*.css in this folder is the
+           untouched legacy baseline and is deliberately left unmodified. -->
+      <p class="footer-text" style="margin-top:10px;font-size:13px;">
+        Designed &amp; built by <strong>Chandra Prakash Thakur</strong> · Week 4 performance case study
+      </p>
+      <ul class="social">
+        <li><a class="footer-link" href="#">Privacy</a></li>
+        <li><a class="footer-link" href="#">Terms</a></li>
+        <li><a class="footer-link" href="#">Status</a></li>
+      </ul>
+    </footer>
+  </div>
+
+  <!-- ❌ 9. An <img> with a data URI avatar repeated 12 times in the markup -->
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Chandra Prakash Thakur" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="NovaDesk Analytics — an accessible, dependency-free product analytics dashboard with charts, a sortable data table and live JSON data." />
+  <title>NovaDesk Analytics — Dashboard</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%234f46e5'/><path d='M22 66h10V44H22zm18 0h10V28H40zm18 0h10V52H58z' fill='white'/></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!--
+    ==========================================================================
+     Week 5 — Mini Web Application
+     --------------------------------------------------------------------------
+     WHY THESE ARE CLASSIC SCRIPTS AND NOT ES MODULES
+     ES modules are always CORS-checked, and a page opened straight from disk
+     (file://) has an opaque origin, so Chrome blocks every module request.
+     The result would be a page that loads but never runs — showing nothing
+     but the loading skeletons. These are therefore classic deferred scripts in
+     dependency order, which work identically over http:// and file://.
+
+     Loading strategy:
+       1. Nothing blocks the parser — all three scripts carry `defer`.
+       2. Skeletons ship in the HTML, so the layout never shifts on load.
+       3. Data is fetched once and cached in localStorage with a 5-minute TTL,
+          then revalidated in the background (stale-while-revalidate).
+       4. charts.js is NOT in this list. It is injected on demand with
+         <script> after the first paint, so charting never delays the numbers.
+       5. If fetch() is blocked (file://), the data falls back to
+         js/fallback-data.js — a classic script that is also injected on demand.
+    ==========================================================================
+  -->
+  <script src="js/data-service.js" defer></script>
+  <script src="js/data-table.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard content</a>
+
+  <!-- ===================== MOBILE BACKDROP (sidenav drawer) ===================== -->
+  <div class="scrim" id="scrim" hidden></div>
+
+  <div class="app">
+
+    <!-- ============================== SIDEBAR ============================== -->
+    <aside class="sidebar" id="sidebar" aria-label="Dashboard sections">
+      <div class="sidebar__head">
+        <a class="brand" href="#main" aria-label="NovaDesk Analytics — overview">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 18h4V9H4zm6 0h4V4h-4zm6 0h4v-6h-4z" fill="currentColor"/></svg>
+          </span>
+          <span class="brand__text">NovaDesk<span class="brand__sub">Analytics</span></span>
+        </a>
+      </div>
+
+      <nav class="sidenav" aria-label="Sections">
+        <p class="sidenav__label" id="nav-overview">Overview</p>
+        <ul class="sidenav__list" aria-labelledby="nav-overview">
+          <li><a class="sidenav__link is-active" href="#overview" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm9 0h6v-9h-6v9Zm0-16v5h6V4h-6Z" fill="currentColor"/></svg>
+            Dashboard</a></li>
+          <li><a class="sidenav__link" href="#revenue">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19h16v2H4zm2-3 4-5 3 3 5-7 1.6 1.2-6.2 8.6-3.1-3.1-2.7 3.5z" fill="currentColor"/></svg>
+            Revenue</a></li>
+          <li><a class="sidenav__link" href="#customers">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4 0-7 2-7 4.5V21h14v-2.5C16 16 13 14 9 14Zm8.5-2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5 2c-.7 0-1.4.1-2 .3 1.5 1.2 2.5 2.9 2.5 4.7V21H22v-2.5c0-2.3-1.6-4.5-4-4.5Z" fill="currentColor"/></svg>
+            Customers</a></li>
+          <li><a class="sidenav__link" href="#pipeline">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v4H3zm0 6h12v4H3zm0 6h7v4H3z" fill="currentColor"/></svg>
+            Pipeline</a></li>
+          <li><a class="sidenav__link" href="#activity">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 11h6v-2h-5V6h-2v7h1Z" fill="currentColor"/></svg>
+            Activity</a></li>
+        </ul>
+
+        <p class="sidenav__label" id="nav-reports">Reports</p>
+        <ul class="sidenav__list" aria-labelledby="nav-reports">
+          <li><a class="sidenav__link" href="#overview">Weekly digest</a></li>
+          <li><a class="sidenav__link" href="#overview">Board pack</a></li>
+          <li><a class="sidenav__link" href="#pipeline">Churn analysis</a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar__foot">
+        <p class="sidebar__meta">Data set <code>dashboard-data.json</code></p>
+        <p class="sidebar__meta" id="data-freshness">—</p>
+      </div>
+    </aside>
+
+    <!-- ================================ MAIN ================================ -->
+    <div class="main-wrap">
+
+      <!-- ---------------------------- TOP BAR ---------------------------- -->
+      <header class="topbar">
+        <button class="icon-btn topbar__menu" type="button" id="menu-btn"
+                aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+
+        <div class="topbar__title">
+          <h1 class="topbar__h1">Executive overview</h1>
+          <p class="topbar__sub" id="period-label">Loading…</p>
+        </div>
+
+        <div class="topbar__actions">
+          <!-- Period filter -->
+          <div class="field field--inline">
+            <label class="field__label" for="period-select">Period</label>
+            <select class="select" id="period-select">
+              <option value="12" selected>Last 12 months</option>
+              <option value="6">Last 6 months</option>
+              <option value="3">Last quarter</option>
+            </select>
+          </div>
+
+          <button class="btn btn--ghost" type="button" id="refresh-btn">
+            <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7Z" fill="currentColor"/></svg>
+            <span>Refresh</span>
+          </button>
+
+          <button class="btn btn--primary" type="button" id="export-btn">
+            <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L11 17.4 5.3 11.7l1.4-1.4L10 13.6V3h2ZM5 19h14v2H5z" fill="currentColor"/></svg>
+            <span>Export CSV</span>
+          </button>
+
+          <button class="icon-btn" type="button" id="theme-btn" aria-pressed="false" aria-label="Switch to dark theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" id="theme-icon"><path d="M12 3a9 9 0 1 0 9 9h-9V3Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="content" id="main" tabindex="-1">
+
+        <!-- ================= GLOBAL LOADING / ERROR BANNERS ================= -->
+        <div class="banner banner--error" id="error-banner" role="alert" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20L12 3Zm0 6v5m0 3v.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p id="error-text">Could not load the dashboard data.</p>
+          <button class="btn btn--sm" type="button" id="error-retry">Retry</button>
+        </div>
+
+        <div class="banner banner--info" id="cache-banner" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-6h2Zm0-8h-2V7h2Z" fill="currentColor"/></svg>
+          <p>Showing a cached copy of the data while a fresh version is downloaded.</p>
+        </div>
+
+        <!-- ============================ KPI CARDS ============================ -->
+        <section class="panel" id="overview" aria-labelledby="kpi-title" tabindex="-1">
+          <header class="panel__head">
+            <div>
+              <h2 class="panel__title" id="kpi-title">Key performance indicators</h2>
+              <p class="panel__sub" id="kpi-sub">Six headline metrics for the selected period</p>
+            </div>
+          </header>
+
+          <!-- Skeletons are shown while the JSON is in flight, then swapped out. -->
+          <ul class="kpi-grid" id="kpi-grid" aria-busy="true">
+            <li class="kpi skeleton" aria-hidden="true"></li>
+            <li class="kpi skeleton" aria-hidden="true"></li>
+            <li class="kpi skeleton" aria-hidden="true"></li>
+            <li class="kpi skeleton" aria-hidden="true"></li>
+            <li class="kpi skeleton" aria-hidden="true"></li>
+            <li class="kpi skeleton" aria-hidden="true"></li>
+          </ul>
+        </section>
+
+        <!-- ========================== REVENUE CHART ========================== -->
+        <div class="grid-2">
+
+          <!-- Line / area chart -->
+          <section class="panel" id="revenue" aria-labelledby="revenue-title" tabindex="-1">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="revenue-title">Revenue by stream</h2>
+                <p class="panel__sub">Monthly recurring revenue split by product line</p>
+              </div>
+              <!-- Interactive filter panel: toggles which series are drawn -->
+              <fieldset class="chipset" id="series-toggle">
+                <legend class="sr-only">Toggle revenue series</legend>
+              </fieldset>
+            </header>
+
+            <div class="chart" id="revenue-chart" role="img" aria-label="Revenue by stream, monthly. A data table with the same values follows."></div>
+
+            <!-- Accessible equivalent of the chart -->
+            <details class="chart__data">
+              <summary>View as table</summary>
+              <div class="table-scroll" tabindex="0" role="region" aria-label="Revenue by stream data table">
+                <table class="data-table" id="revenue-table">
+                  <caption>Monthly revenue by stream, in US dollars</caption>
+                </table>
+              </div>
+            </details>
+          </section>
+
+          <!-- Donut chart -->
+          <section class="panel" id="sources" aria-labelledby="sources-title" tabindex="-1">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="sources-title">Acquisition sources</h2>
+                <p class="panel__sub">Share of new workspaces by first touch</p>
+              </div>
+            </header>
+
+            <div class="chart chart--donut" id="sources-chart" role="img" aria-label="Acquisition sources donut chart. A data table with the same values follows."></div>
+
+            <details class="chart__data">
+              <summary>View as table</summary>
+              <div class="table-scroll" tabindex="0" role="region" aria-label="Acquisition sources data table">
+                <table class="data-table" id="sources-table">
+                  <caption>Share of new workspaces by acquisition source</caption>
+                </table>
+              </div>
+            </details>
+          </section>
+        </div>
+
+        <div class="grid-2">
+
+          <!-- Grouped bar chart -->
+          <section class="panel" id="customers" aria-labelledby="channels-title" tabindex="-1">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="channels-title">Revenue by channel</h2>
+                <p class="panel__sub">This year compared with last year</p>
+              </div>
+            </header>
+
+            <div class="chart" id="channels-chart" role="img" aria-label="Grouped bar chart comparing this year with last year by channel."></div>
+
+            <details class="chart__data">
+              <summary>View as table</summary>
+              <div class="table-scroll" tabindex="0" role="region" aria-label="Revenue by channel data table">
+                <table class="data-table" id="channels-table">
+                  <caption>Revenue by acquisition channel, this year versus last year</caption>
+                </table>
+              </div>
+            </details>
+          </section>
+
+          <!-- Regional breakdown + capacity meters -->
+          <section class="panel" id="regions" aria-labelledby="regions-title" tabindex="-1">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="regions-title">Regional performance</h2>
+                <p class="panel__sub">Revenue share and year-on-year change</p>
+              </div>
+            </header>
+
+            <ul class="region-list" id="region-list"></ul>
+
+            <h3 class="sub-title">Team capacity</h3>
+            <ul class="meter-list" id="capacity-list"></ul>
+          </section>
+        </div>
+
+        <!-- ====================== TRANSACTIONS DATA TABLE ====================== -->
+        <section class="panel" id="pipeline" aria-labelledby="transactions-title" tabindex="-1">
+          <header class="panel__head panel__head--wrap">
+            <div>
+              <h2 class="panel__title" id="transactions-title">Recent invoices</h2>
+              <p class="panel__sub" id="transactions-sub">Loading…</p>
+            </div>
+
+            <div class="table-tools">
+              <div class="field field--inline">
+                <label class="field__label" for="search-input">Search invoices</label>
+                <input class="input input--search" type="search" id="search-input"
+                       placeholder="Customer, ID, owner…" autocomplete="off"
+                       aria-describedby="search-hint" />
+                <p class="sr-only" id="search-hint">Filters the invoice table as you type.</p>
+              </div>
+
+              <div class="field field--inline">
+                <label class="field__label" for="status-filter">Status</label>
+                <select class="select" id="status-filter">
+                  <option value="">All statuses</option>
+                  <option value="paid">Paid</option>
+                  <option value="review">In review</option>
+                  <option value="failed">Failed</option>
+                  <option value="free">Free tier</option>
+                </select>
+              </div>
+
+              <div class="field field--inline">
+                <label class="field__label" for="region-filter">Region</label>
+                <select class="select" id="region-filter">
+                  <option value="">All regions</option>
+                </select>
+              </div>
+            </div>
+          </header>
+
+          <div class="table-scroll" tabindex="0" role="region" aria-labelledby="transactions-title">
+            <table class="data-table data-table--sortable" id="transactions-table">
+              <caption class="sr-only">Recent invoices with sortable columns</caption>
+              <thead>
+                <tr>
+                  <th scope="col" aria-sort="ascending">
+                    <button class="th-sort" type="button" data-sort="id">Invoice <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="date">Date <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="customer">Customer <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="plan">Plan <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="seats">Seats <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="descending">
+                    <button class="th-sort" type="button" data-sort="amount">Amount <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="status">Status <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button class="th-sort" type="button" data-sort="owner">Owner <span class="th-sort__icon" aria-hidden="true"></span></button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="transactions-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Pagination: an accessible navigation landmark with a real list -->
+          <nav class="pager" id="pager" aria-label="Invoice table pages"></nav>
+
+          <p class="empty-state" id="table-empty" hidden>
+            <strong>No invoices match these filters.</strong>
+            <button class="btn btn--sm" type="button" id="clear-filters">Clear all filters</button>
+          </p>
+        </section>
+
+        <!-- ============================== ACTIVITY ============================== -->
+        <div class="grid-2">
+          <section class="panel" id="activity" aria-labelledby="activity-title" tabindex="-1">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="activity-title">Recent activity</h2>
+                <p class="panel__sub">Deploys, alerts and milestones</p>
+              </div>
+            </header>
+            <ol class="timeline" id="timeline"></ol>
+          </section>
+
+          <section class="panel" aria-labelledby="summary-title">
+            <header class="panel__head">
+              <div>
+                <h2 class="panel__title" id="summary-title">Period summary</h2>
+                <p class="panel__sub">Plain-language reading of the data set</p>
+              </div>
+            </header>
+            <div id="summary-body" class="summary">
+              <p class="summary__placeholder">Waiting for data…</p>
+            </div>
+          </section>
+        </div>
+
+        <footer class="pagefoot">
+          <p>
+            NovaDesk Analytics · Week 5 mini web application ·
+            <strong>zero runtime dependencies</strong> · charts hand-drawn in SVG ·
+            data from <code>data/dashboard-data.json</code>
+          </p>
+          <p class="credit">Designed &amp; built by <strong>Chandra Prakash Thakur</strong></p>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Tooltip layer shared by the charts (single live region) -->
+  <div class="chart-tip" id="chart-tip" role="presentation" hidden></div>
+
+  <!-- Announces filter/sort/pagination changes and export results -->
+  <p class="sr-only" id="live-region" role="status" aria-live="polite"></p>
+
+  <noscript>
+    <div class="noscript-note">
+      <h2>JavaScript is disabled</h2>
+      <p>
+        This dashboard renders its charts and table with JavaScript. The underlying data
+        is a plain JSON file and can be read directly at
+        <code>data/dashboard-data.json</code>.
+      </p>
+    </div>
+  </noscript>
+</body>
+</html>
